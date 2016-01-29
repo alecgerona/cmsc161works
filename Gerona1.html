@@ -74,11 +74,20 @@
     var uFragColorPointer = gl.getUniformLocation(program,"uFragColor");
     //Set values of uFragColor variable in WebGL Program
     gl.uniform4f(uFragColorPointer,1.0,0.0,0.0,1.0);
-    
+    var x, y;
 
     for (i=0; i<10; i++){ //Generate 10 small squares randomly
       //Set values of aPosition variable in WebGL Program
-      gl.vertexAttrib4f(aPositionPointer,randpos(),randpos(),0.0,1.0);
+      x=randpos();
+      y=randpos();
+      gl.vertexAttrib4f(aPositionPointer,x,y,0.0,1.0);
+
+      //Change color based on the quadrant of the square.
+      if (x>0 && y>0) gl.uniform4f(uFragColorPointer,1.0,0.0,0.0,1.0);
+      else if (x<0 && y>0) gl.uniform4f(uFragColorPointer,0.0,1.0,0.0,1.0);
+      else if (x<0 && y<0) gl.uniform4f(uFragColorPointer,0.0,0.0,1.0,1.0);
+      else if (x>0 && y<0) gl.uniform4f(uFragColorPointer,0.0,0.0,0.0,0.0);
+
       //Execute a vertex shader to draw shapes (mode,first,count)
       gl.drawArrays(gl.POINTS,0,1);
     }
