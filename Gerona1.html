@@ -68,16 +68,25 @@
     
     //Get the storage location of attribute variable named "aPosition"
     var aPositionPointer = gl.getAttribLocation(program,"aPosition");
-    //Set values of aPosition variable in WebGL Program
-    gl.vertexAttrib4f(aPositionPointer,0.0,0.0,0.0,1.0);
+    
     
     //Get the storage location of uniform variable named "uFragColor"
     var uFragColorPointer = gl.getUniformLocation(program,"uFragColor");
     //Set values of uFragColor variable in WebGL Program
     gl.uniform4f(uFragColorPointer,1.0,0.0,0.0,1.0);
     
-    //Execute a vertex shader to draw shapes (mode,first,count)
-    gl.drawArrays(gl.POINTS,0,1);
+
+    for (i=0; i<10; i++){ //Generate 10 small squares randomly
+      //Set values of aPosition variable in WebGL Program
+      gl.vertexAttrib4f(aPositionPointer,randpos(),randpos(),0.0,1.0);
+      //Execute a vertex shader to draw shapes (mode,first,count)
+      gl.drawArrays(gl.POINTS,0,1);
+    }
+  }
+  
+  function randpos(){
+    return Math.random() * 2 - 1; //Generates random numbers between -1 and 1.
+     
   }
   </script>
 </head>
