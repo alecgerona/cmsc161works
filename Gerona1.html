@@ -51,7 +51,7 @@
     
     
     //Get the rendering context (WebGL)
-    var gl = initializeWebGL(canvas,true);
+    var gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
 
     //initialize shaders
     var vertexShader = initializeShader(gl,"vshader");
@@ -91,11 +91,11 @@
       //Execute a vertex shader to draw shapes (mode,first,count)
       gl.drawArrays(gl.POINTS,0,1);
     }
-    gl.vertexAttrib4f(aPositionPointer, 0,0,0,1);
-    gl.drawArrays(gl.POINTS,0,1);
+
     
 
       canvas.addEventListener('click', function(e){
+        
         var mouseCoord = getMouseCoord(canvas, e);
         gl.vertexAttrib4f(aPositionPointer,mouseCoord.x,mouseCoord.y,0.0,1.0);
         //Change color based on the quadrant of the square.
