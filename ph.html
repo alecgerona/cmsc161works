@@ -104,7 +104,27 @@
     //Execute vertex shader
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 
-    
+    /**DRAW SUN CIRCLE**/
+
+    var square1_vertex = [
+    -0.5,-0.5, 0.0, 1.0,  //vertex 1
+    -0.5, 0.5, 0.0, 1.0,  //vertex 2
+     0.5, 0.5, 0.0, 1.0,  //vertex 3
+     0.5,-0.5, 0.0, 1.0   //vertex 4
+    ];
+
+    /*PASSING MULTIPLE DATA VALUES TO A VERTEX SHADER*/
+    var square1_vertex_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,square1_vertex_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(square1_vertex),gl.STATIC_DRAW);
+    gl.vertexAttribPointer(aPositionPointer,4,gl.FLOAT,false,0,0);
+    gl.enableVertexAttribArray(aPositionPointer);
+
+    //draw buffer that is bound to ARRAY_BUFFER
+    gl.uniform4f(uFragColorPointer,1.0,0.0,0.0,1.0);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+
+
 
 
 
