@@ -67,6 +67,40 @@
     var uFragColorPointer = gl.getUniformLocation(program,"uFragColor");
 
 
+
+    var vertices = [
+         0,  0,  0.0,
+         0.333,  0,  0.0
+    ];
+
+    var numTris = 32;
+
+    var degPerTri = (2 * Math.PI) / numTris;
+    
+    for(var i = 0; i < numTris; i++) {
+        var index = 2*3 + i*3
+        var angle = degPerTri * (i+1);
+
+        vertices[index] = Math.cos(angle)/3; 
+        vertices[index+1] = Math.sin(angle)/2; 
+        vertices[index+2] = 0; 
+    }
+    var vertexBuffer = gl.createBuffer();
+    vertexBuffer.itemSize=3;
+    vertexBuffer.numItems=numTris+2;
+    gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(aPositionPointer,vertexBuffer.itemSize,gl.FLOAT,false,0,0);
+    gl.enableVertexAttribArray(aPositionPointer);
+
+    vertexBuffer.itemSize = 3;
+    vertexBuffer.numItems = numTris + 2;
+
+    gl.uniform4f(uFragColorPointer,1,0,0,1.0);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, vertexBuffer.numItems);
+
+
     
   }
   </script>
