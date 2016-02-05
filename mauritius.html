@@ -65,7 +65,9 @@
     //Get the storage location of shader variables
     var aPositionPointer = gl.getAttribLocation(program,"aPosition");
     var uFragColorPointer = gl.getUniformLocation(program,"uFragColor");
-    //array that contains the vertex data
+
+
+    /**DRAW RED RECTANGLE**/
     var vertices = [
     -1.0, 0.5, 0.0, 1.0,  //vertex 1
     -1.0, 1.0, 0.0, 1.0,  //vertex 2
@@ -84,6 +86,8 @@
     //Execute vertex shader
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 
+    /**DRAW BLUE RECTANGLE**/
+
     var vertices = [
     -1.0, 0.0, 0.0, 1.0,  //vertex 1
     -1.0, 0.5, 0.0, 1.0,  //vertex 2
@@ -99,6 +103,46 @@
 
     //Set color in fragment shader
     gl.uniform4f(uFragColorPointer,0.0,0.0,1.0,1.0);
+    //Execute vertex shader
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+
+    /**DRAW YELLOW RECTANGLE**/
+
+    var vertices = [
+    -1.0, -0.5, 0.0, 1.0,  //vertex 1
+    -1.0, 0.0, 0.0, 1.0,  //vertex 2
+     1.0, 0.0, 0.0, 1.0,  //vertex 3
+     1.0, -0.5, 0.0, 1.0   //vertex 4
+    ];
+    var vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW);
+    gl.vertexAttribPointer(aPositionPointer,4,gl.FLOAT,false,0,0);
+    gl.enableVertexAttribArray(aPositionPointer);
+
+
+    //Set color in fragment shader
+    gl.uniform4f(uFragColorPointer,1,1,0,1.0);
+    //Execute vertex shader
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+
+    /**DRAW GREEN RECTANGLE**/
+
+    var vertices = [
+    -1.0, -1.0, 0.0, 1.0,  //vertex 1
+    -1.0, -0.5, 0.0, 1.0,  //vertex 2
+     1.0, -0.5, 0.0, 1.0,  //vertex 3
+     1.0, -1.0, 0.0, 1.0   //vertex 4
+    ];
+    var vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW);
+    gl.vertexAttribPointer(aPositionPointer,4,gl.FLOAT,false,0,0);
+    gl.enableVertexAttribArray(aPositionPointer);
+
+
+    //Set color in fragment shader
+    gl.uniform4f(uFragColorPointer,0,1,0,1.0);
     //Execute vertex shader
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
   }
