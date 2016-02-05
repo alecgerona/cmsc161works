@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>
-      Japan Flag
+      Philippine Flag
   </title>
 
   <!--Import external javascript file-->
@@ -66,40 +66,28 @@
     var aPositionPointer = gl.getAttribLocation(program,"aPosition");
     var uFragColorPointer = gl.getUniformLocation(program,"uFragColor");
 
-
-
+    /**DRAW BLUE RECTANGLE**/
     var vertices = [
-         0,  0,  0.0,
-         0.25,  0,  0.0
+    -0.5, 0.0, 0.0, 1.0,  //vertex 1
+    -1.0, 1.0, 0.0, 1.0,  //vertex 2
+     1.0, 1.0, 0.0, 1.0,  //vertex 3
+     1.0, 0.0, 0.0, 1.0   //vertex 4
     ];
-
-    var triangle = 32;
-
-    var degree = (2 * Math.PI) / triangle;
-    
-    for(var i = 0; i < triangle; i++) {
-        var index = 2*3 + i*3
-        var angle = degree * (i+1);
-
-        vertices[index] = Math.cos(angle)/4; //Adds the x coordinate of the nth triangle divided by a number to make the size smaller.
-        vertices[index+1] = Math.sin(angle)/2; //Adds the y coordinate of the nth triangle divided by a number to make the sizes smaller.
-        vertices[index+2] = 0; //Simply makes the z component 0.
-    }
     var vertexBuffer = gl.createBuffer();
-    vertexBuffer.itemSize=3; //sets the number of points per draw
-    vertexBuffer.numItems=triangle;
     gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
-
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(aPositionPointer,vertexBuffer.itemSize,gl.FLOAT,false,0,0);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW);
+    gl.vertexAttribPointer(aPositionPointer,4,gl.FLOAT,false,0,0);
     gl.enableVertexAttribArray(aPositionPointer);
 
-    vertexBuffer.itemSize = 3;
-    vertexBuffer.numItems = triangle + 2;
 
-    gl.uniform4f(uFragColorPointer,1,0,0,1.0);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, vertexBuffer.numItems);
+    //Set color in fragment shader
+    gl.uniform4f(uFragColorPointer,0,0.0,1,1.0);
+    //Execute vertex shader
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 
+
+
+    
 
     
   }
@@ -110,7 +98,7 @@
 	<canvas id="main_canvas" width="500" height="250" style="border: 1px black solid">
 	</canvas>
   <h1>
-    Flag of Japan
+    Flag of the Philippines
   </h1>
 </body>
 </html>
