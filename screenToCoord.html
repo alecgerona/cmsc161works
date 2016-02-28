@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ScreenToCoord()</title>
+	</head>
+	<body>
+		
+		<form>
+		  pixel x: <input type="text" id="x"><br>
+		  pixel y: <input type="text" id="y"><br>
+		<button type="button" onclick="screenToCoord()">Submit</button>
+		</form>
+
+		<script type="text/javascript">
+			function screenToCoord(){
+				var x = document.getElementById("x").value;
+				var y = document.getElementById("y").value;
+				var screenx = 542;
+				var screeny = 540;
+				x = (x - screenx / 2) / (screenx / 2);
+				y = (-y + screeny / 2) / (screeny / 2);
+				window.alert(x.toFixed(4)+", "+y.toFixed(4));
+
+			}
+		</script>
+	</body>
+</html>
