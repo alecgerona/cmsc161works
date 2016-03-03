@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+      Japan Flag
+  </title>
+
+  <!--Import external javascript file-->
+  <!--Helper javascript methods for initializing webgl-->
+  <script src="./lib/webgl-init.js"></script>
+  <script src="./lib/webgl-utils.js"></script>
+  <script src="./lib/webgl-debug.js"></script>
+
+  <!--Vertex Shader-->
+  <script type="x-shader/x-vertex" id="vshader">
+    //declare an attribute variable that can be accessed in our javascript program
+    attribute vec4 aPosition;
+    void main() {
+
+      //Built-in variable in GLSL ES that dictates the position of the vertex
+      gl_Position = aPosition;
+
+      //Built-in variable in GLSL ES that dictates the size of the vertex
+      gl_PointSize = 10.0;
+    }
+  </script>
+
+  <!--Fragment Shader-->
+  <script type="x-shader/x-fragment" id="fshader">
+    //specifies the precision qualifer for the variable float
+    precision mediump float;
+
+    //declare and uniform variable that can be accessed in our javascript program
+    uniform vec4 uFragColor;
+    void main() {
+
+
+      //Sets the color for every fragment created by primitive assembly
+      gl_FragColor = uFragColor;
+    }
+  </script>
+
+
+  <script>
+  function main() {
+    //Retrieve <canvas> element
+    var canvas = document.getElementById("main_canvas");
+    if(!canvas) {
+        console.log("Failed to retrieve the <canvas> element");
+    }
+
+    //Get the rendering context (WebGL)
+    var gl = initializeWebGL(canvas,true);
+
+    //initialize shaders program
+    var vertexShader = initializeShader(gl,"vshader");
+    var fragmentShader = initializeShader(gl, "fshader");
+    var program = initializeProgram(gl,vertexShader,fragmentShader);
+    gl.useProgram(program);
+
+    //clear canvas
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    //Get the storage location of shader variables
+    var aPositionPointer = gl.getAttribLocation(program,"aPosition");
+    var uFragColorPointer = gl.getUniformLocation(program,"uFragColor");
+
+
+
+    var vertices = [
+         0,  0,  0.0,
+         0.25,  0,  0.0
+    ];
+
+    var triangle = 32;
+
+    var degree = (2 * Math.PI) / triangle;
+    
+    for(var i = 0; i < triangle; i++) {
+        var index = 2*3 + i*3
+        var angle = degree * (i+1);
+
+        vertices[index] = Math.cos(angle)/4; //Adds the x coordinate of the nth triangle divided by a number to make the size smaller.
+        vertices[index+1] = Math.sin(angle)/2; //Adds the y coordinate of the nth triangle divided by a number to make the sizes smaller.
+        vertices[index+2] = 0; //Simply makes the z component 0.
+    }
+    var vertexBuffer = gl.createBuffer();
+    vertexBuffer.itemSize=3; //sets the number of points per draw
+    vertexBuffer.numItems=triangle;
+    gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+    gl.vertexAttribPointer(aPositionPointer,vertexBuffer.itemSize,gl.FLOAT,false,0,0);
+    gl.enableVertexAttribArray(aPositionPointer);
+
+    vertexBuffer.itemSize = 3;
+    vertexBuffer.numItems = triangle + 2;
+
+    gl.uniform4f(uFragColorPointer,1,0,0,1.0);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, vertexBuffer.numItems);
+
+
+    
+  }
+  </script>
+</head>
+
+<body onload="main()" style="text-align: center">
+	<canvas id="main_canvas" width="500" height="250" style="border: 1px black solid">
+	</canvas>
+  <h1>
+    Flag of Japan
+  </h1>
+</body>
+</html>

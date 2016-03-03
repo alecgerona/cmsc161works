@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+      Exercise 1
+  </title>
+  
+  <!--Import external javascript file-->
+  <!--Helper javascript methods for initializing webgl-->
+  <script src="./lib/webgl-init.js"></script>
+  <script src="./lib/webgl-utils.js"></script>
+  <script src="./lib/webgl-debug.js"></script>
+  
+  <!--Vertex Shader-->
+  <script type="x-shader/x-vertex" id="vshader">
+    //declare an attribute variable that can be accessed in our javascript program
+    attribute vec4 aPosition;
+    void main() {
+      
+      //Built-in variable in GLSL ES that dictates the position of the vertex
+      gl_Position = aPosition;
+      
+      //Built-in variable in GLSL ES that dictates the size of the vertex
+      gl_PointSize = 10.0;
+    }
+  </script>
+  
+  <!--Fragment Shader-->
+  <script type="x-shader/x-fragment" id="fshader">
+    //specifies the precision qualifer for the variable float
+    precision mediump float;
+    
+    //declare and uniform variable that can be accessed in our javascript program
+    uniform vec4 uFragColor;
+    void main() {
+      
+      
+      //Sets the color for every fragment created by primitive assembly
+      gl_FragColor = uFragColor;
+    }
+  </script>
+  
+  
+  <script>
+  function main() {
+    //Retrieve <canvas> element
+    var canvas = document.getElementById("main_canvas");
+    if(!canvas) {
+        console.log("Failed to retrieve the <canvas> element");
+    }
+    
+    
+    //Get the rendering context (WebGL)
+    var gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
+
+    //initialize shaders
+    var vertexShader = initializeShader(gl,"vshader");
+    var fragmentShader = initializeShader(gl, "fshader");
+    
+    //Initialize WebGL program and link vertex shader and fragment shader code
+    var program = initializeProgram(gl,vertexShader,fragmentShader);
+    gl.useProgram(program);
+    
+    //color for clearing <canvas>
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    //clear <canvas>
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    
+    //Get the storage location of attribute variable named "aPosition"
+    var aPositionPointer = gl.getAttribLocation(program,"aPosition");
+    
+    
+    //Get the storage location of uniform variable named "uFragColor"
+    var uFragColorPointer = gl.getUniformLocation(program,"uFragColor");
+    //Set values of uFragColor variable in WebGL Program
+    gl.uniform4f(uFragColorPointer,1.0,0.0,0.0,1.0);
+    var x, y;
+
+    for (i=0; i<10; i++){ //Generate 10 small squares randomly
+      //Set values of aPosition variable in WebGL Program
+      x=randpos();
+      y=randpos();
+      gl.vertexAttrib4f(aPositionPointer,x,y,0.0,1.0);
+
+      //Change color based on the quadrant of the square.
+      if (x>0 && y>0) gl.uniform4f(uFragColorPointer,1.0,0.0,0.0,1.0);
+      else if (x<0 && y>0) gl.uniform4f(uFragColorPointer,0.0,1.0,0.0,1.0);
+      else if (x<0 && y<0) gl.uniform4f(uFragColorPointer,0.0,0.0,1.0,1.0);
+      else if (x>0 && y<0) gl.uniform4f(uFragColorPointer,0.0,0.0,0.0,0.0);
+
+      //Execute a vertex shader to draw shapes (mode,first,count)
+      gl.drawArrays(gl.POINTS,0,1);
+    }
+
+    
+
+      canvas.addEventListener('click', function(e){
+        
+        var mouseCoord = getMouseCoord(canvas, e);
+        gl.vertexAttrib4f(aPositionPointer,mouseCoord.x,mouseCoord.y,0.0,1.0);
+        //Change color based on the quadrant of the square.
+        if (mouseCoord.x>0 && mouseCoord.y>0) gl.uniform4f(uFragColorPointer,1.0,0.0,0.0,1.0);
+        else if (mouseCoord.x<0 && mouseCoord.y>0) gl.uniform4f(uFragColorPointer,0.0,1.0,0.0,1.0);
+        else if (mouseCoord.x<0 && mouseCoord.y<0) gl.uniform4f(uFragColorPointer,0.0,0.0,1.0,1.0);
+        else if (mouseCoord.x>0 && mouseCoord.y<0) gl.uniform4f(uFragColorPointer,0.0,0.0,0.0,0.0);
+
+        gl.drawArrays(gl.POINTS,0,1);
+      });
+  }
+
+  function getMouseCoord(canvas, e) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+          x: ((e.clientX-rect.left)/(rect.right-rect.left)) * 2 - 1, //Formula for computing the x coordinate with respect to the canvas bounds and the -1 to 1 range.
+          y: (((e.clientY-rect.top)/(rect.bottom-rect.top)) * 2 - 1) * -1 //Formula for computing the y coordinate with respect to the canvas bounds, the -1 to 1 range, and compensating for the inverse results by multiplying it by negative 1.
+        };
+      }
+  
+  function randpos(){
+    return Math.random() * 2 - 1; //Generates random numbers between -1 and 1.
+     
+  }
+  </script>
+</head>
+
+<body onload="main()">
+	<canvas id="main_canvas" width="400" height="400" style="border: 1px black solid; margin:auto; display:block">
+	</canvas>
+
+</body>
+</html>
