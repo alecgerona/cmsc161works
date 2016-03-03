@@ -95,10 +95,17 @@
         //3 is -0.2
         //6 is -1.76
         //9 is 2.94
-        var angleOfRotation = 2.94; //Starts the minute hand at 12
+        var today = new Date();
+        console.log(today.getMinutes());
+        var mins = today.getMinutes();
+        var angleOfRotation = mins * 0.1; //Starts the hand
+        
+        
         var toRadians = glMatrix.toRadian(angleOfRotation);
         var prev = Date.now();
         var delay = 3;
+        var rep = 0;
+
         var animate = function() {
           gl.clearColor(0.0,0.0,0.0,1.0);
           gl.clear(gl.COLOR_BUFFER_BIT);  
@@ -120,17 +127,21 @@
 
           //angleOfRotation-= 10 * (elapsed/ (delay * 100000));
           angleOfRotation-=0.105;
+          console.log(angleOfRotation);
           angleOfRotation%=360;
           //END UPDATE
 
           //call function animate again
           //requestAnimFrame(animate);
+          // while (rep < 15){
+          //   requestAnimFrame(animate);
+          //   rep++;
+          // }
           setTimeout(function(){ requestAnimFrame(animate); }, 1000);
         }
 
-        //start animation
+
         animate();
-        
    
       }
     </script>
