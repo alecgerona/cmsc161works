@@ -79,7 +79,7 @@
         
         
         var vertices = 
-        [1,0.2,0.0,1.0,
+        [0.83,0.2,0.0,1.0,
         0.3,0,0.0,1.0,
         0,0.0,0.0,1.0];
         
@@ -96,15 +96,43 @@
         //6 is -1.76
         //9 is 2.94
         var today = new Date();
-        console.log(today.getSeconds());
-        var mins = today.getSeconds();
-        var angleOfRotation = 1.37 - (mins*0.105); //Starts the hand
+        console.log(today.getMinutes());
+        var mins = today.getMinutes();
+        var angleOfRotation = 1.28 - (mins*0.105); //Starts the hand
         
         
         var toRadians = glMatrix.toRadian(angleOfRotation);
         var prev = Date.now();
         var delay = 3;
         var rep = 0;
+
+        //////////////////////////
+        var vertices2 = 
+        [0.67,0.2,0.0,1.0,
+        0.3,0,0.0,1.0,
+        0,0.0,0.0,1.0];
+        var vertexBuffer2 = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer2);
+        gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices2),gl.STATIC_DRAW);
+        gl.vertexAttribPointer(aPositionPointer,4,gl.FLOAT,false,0,0);
+        gl.drawArrays(gl.TRIANGLES,0,3);
+        
+        var transformationMatrix2 = mat4.create();
+        //12 is 1.37
+        //3 is -0.2
+        //6 is -1.76
+        //9 is 2.94
+        var today2 = new Date();
+        console.log(today2.getHours());
+        var hours = today2.getHours();
+        var angleOfRotation2 = 1.28 - (hours*0.525); //Starts the hand
+        
+        
+        var toRadians2 = glMatrix.toRadian(angleOfRotation2);
+        var prev2 = Date.now();
+        var delay2 = 3;
+        var rep2 = 0;
+        /////////////////
 
         var animate = function() {
           gl.clearColor(0.0,0.0,0.0,1.0);
@@ -117,31 +145,63 @@
           gl.uniformMatrix4fv(uTransformationMatrixPointer,false,transformationMatrix);
           gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
           gl.vertexAttribPointer(aPositionPointer,4,gl.FLOAT,false,0,0);
+          gl.uniform4f(uFragColorPointer,0.0,1.0,0.0,1.0);
           gl.drawArrays(gl.TRIANGLES,0,3);
           //END DRAW
 
-          //START UPDATE
-          var current = Date.now();
-          var elapsed = current - prev;
-          prev = current;
+          //START DRAW
+          
+          mat4.identity(transformationMatrix2);
+          mat4.rotateZ(transformationMatrix2,transformationMatrix2,angleOfRotation2);
+          gl.uniformMatrix4fv(uTransformationMatrixPointer,false,transformationMatrix2);
+          gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer2);
+          gl.vertexAttribPointer(aPositionPointer,4,gl.FLOAT,false,0,0);
+          gl.uniform4f(uFragColorPointer,1.0,0.0,0.0,1.0);
+          gl.drawArrays(gl.TRIANGLES,0,3);
 
-          //angleOfRotation-= 10 * (elapsed/ (delay * 100000));
-          angleOfRotation-=0.105;
-          console.log(angleOfRotation);
-          angleOfRotation%=360;
-          //END UPDATE
+          //END DRAW
+          var currTime = new Date();
+          if (mins != currTime.getMinutes()){
+            //START UPDATE
+            var current = Date.now();
+            var elapsed = current - prev;
+            prev = current;
+
+            angleOfRotation-=0.105; //Divides the clock into 60 segments
+            angleOfRotation%=360;
+            mins = currTime.getMinutes();
+            //END UPDATE
+          }
+          
+          var currHour = new Date();
+
+          if (hours != currHour.getHours()){
+
+            //START UPDATE
+            var current2 = Date.now();
+            var elapsed2 = current2 - prev2;
+            prev2 = current2;
+
+            angleOfRotation2-=0.525; //Divides the clock into 12 segments
+            angleOfRotation2%=360;
+            hours = currHour.getHours();
+            //END UPDATE
+          }
+          
 
           //call function animate again
-          //requestAnimFrame(animate);
-          // while (rep < 15){
-          //   requestAnimFrame(animate);
-          //   rep++;
-          // }
-          setTimeout(function(){ requestAnimFrame(animate); }, 1000);
+          setTimeout(function(){
+           requestAnimFrame(animate);
+
+          }, 1000);
+          
         }
 
 
         animate();
+
+
+        
    
       }
     </script>
