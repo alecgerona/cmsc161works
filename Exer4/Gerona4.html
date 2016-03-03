@@ -96,9 +96,9 @@
         //6 is -1.76
         //9 is 2.94
         var today = new Date();
-        console.log(today.getMinutes());
-        var mins = today.getMinutes();
-        var angleOfRotation = mins * 0.1; //Starts the hand
+        console.log(today.getSeconds());
+        var mins = today.getSeconds();
+        var angleOfRotation = 1.37 - (mins*0.105); //Starts the hand
         
         
         var toRadians = glMatrix.toRadian(angleOfRotation);
